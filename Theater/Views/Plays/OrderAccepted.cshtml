@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>OrderComplited</title>
+</head>
+<body>
+
+    <div class="jumbotron">
+        <h1>@Resources.Resource.OrderAccepted</h1>
+        <p>@Resources.Resource.OrderAcceptedInfo</p>
+        <a href="javascript:history.go(-1);" class="btn btn-default">@Resources.Resource.Back</a>
+
+        @Html.ActionLink(@Resources.Resource.Cart, "Cart", "Account", null, new { @class = "btn btn-primary" })
+    </div>
+
+
+</body>
+</html>

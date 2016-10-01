@@ -1,0 +1,80 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>@Resources.Resource.Registration</legend>
+
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                <div class="form-group">
+
+                    <label for="inputName" class="col-lg-2 control-label">@Resources.Resource.Name</label>
+                    <div class="col-lg-5">
+                        <input name="Name" type="text" class="form-control" id="inputName" placeholder=@Resources.Resource.Name maxlength="15">
+                    </div>
+                    @*
+                        <div class="controls">
+                        @Html.ValidationMessage("Email")
+                        @Html.TextBox("Email", Model.Email)
+                        </div>
+                    *@
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPhone" class="col-lg-2 control-label">@Resources.Resource.MobilePhone</label>
+                    <div class="col-lg-5">
+                        <input name="Phone" type="text" class="form-control" id="inputPhone" placeholder=@Resources.Resource.MobilePhone maxlength="13">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">@Resources.Resource.Email</label>
+                    <div class="col-lg-5">
+                        <input name="Email" type="text" class="form-control" id="inputEmail" placeholder=@Resources.Resource.Email maxlength="40">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">@Resources.Resource.Role</label>
+                    <div class="col-lg-5">
+                        <select name="Role" class="form-control" id="select">
+                            <option value="@Theater.Models.Account.Role.Customer">@Resources.Resource.Customer</option>
+                            <option value="@Theater.Models.Account.Role.Сourier">@Resources.Resource.Courier</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">@Resources.Resource.Password</label>
+                    <div class="col-lg-5">
+                        <input name="Password" type="password" class="form-control" id="inputPassword" placeholder=@Resources.Resource.Password maxlength="25">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputConfirmPassword" class="col-lg-2 control-label">@Resources.Resource.ConfirmPassword</label>
+                    <div class="col-lg-5">
+                        <input name="confirmPassword" type="password" class="form-control" id="inputConfirmPassword" placeholder=@Resources.Resource.ConfirmPassword maxlength="25">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        @Html.ActionLink(@Resources.Resource.Cancel, "Index", "Home", null, new { @class = "btn btn-default" })
+                        <button type="submit" class="btn btn-primary">@Resources.Resource.Registration</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    }
+</body>
+</html>

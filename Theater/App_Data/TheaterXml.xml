@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Theater>
+  <Seats>
+    <Seat type="Parterre" count="100"/>
+    <Seat type="Balcony" count="50"/>
+  </Seats>  
+  <Repertoire>
+    <Play name="Angry Little Asian Girl" priceParterre="50000" priceBalcony="35000"/>
+    <Play name="Satirical hip hop" priceParterre="100000" priceBalcony="65000"/>
+    <Play name="The Rutles" priceParterre="60000" priceBalcony="45000"/>
+    <Play name="Shmoo" priceParterre="50000" priceBalcony="35000"/>
+  </Repertoire>
+</Theater>

@@ -1,0 +1,46 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>LogIn</title>
+</head>
+<body>
+    @using (Html.BeginForm("LogIn", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>@Resources.Resource.Login</legend>
+
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">@Resources.Resource.Email</label>
+                    <div class="col-lg-5">
+                        <input name="Email" type="text" class="form-control" id="inputEmail" placeholder=@Resources.Resource.Email>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">@Resources.Resource.Password</label>
+                    <div class="col-lg-5">
+                        <input name="Password" type="password" class="form-control" id="inputPassword" placeholder=@Resources.Resource.Password>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        @Html.ActionLink(@Resources.Resource.Registration, "Register", "Account", null, new { @class = "btn btn-default" })
+                        <button type="submit" class="btn btn-primary">@Resources.Resource.Login</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    }
+</body>
+</html>

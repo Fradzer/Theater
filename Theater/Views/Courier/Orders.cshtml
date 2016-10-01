@@ -1,0 +1,99 @@
+﻿@using Theater.Models.Account
+@using Theater.Models.Plays
+
+@model List<Order>
+@{
+    List<DatePlay> dates = ViewBag.Dates;
+    List<Play> plays = ViewBag.Plays;
+    List<User> logins = ViewBag.Logins;
+
+    DateTime datePlay = new DateTime();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Orders</title>
+</head>
+<body>
+    @if (Model.Count != 0)
+            {
+                using (Html.BeginForm("ChangeStatusOrder", "Courier", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th>@Resources.Resource.Name</th>
+                        <th>@Resources.Resource.MobilePhone</th>
+                        <th>@Resources.Resource.Email</th>
+                        <th>@Resources.Resource.Play</th>
+                        <th>@Resources.Resource.Date</th>
+                        <th>@Resources.Resource.Category</th>
+                        <th>@Resources.Resource.Tickets</th>
+                        <th>@Resources.Resource.Price</th>
+                        <th>@Resources.Resource.StatusOrder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (item.Status != StatusOrder.Completed)
+                        {
+                            User user = null;
+                            foreach (var login in logins)
+                            {
+                                if (item.LoginId == login.Id)
+                                {
+                                    user = login;
+                                    break;
+                                }
+                            }
+                            <tr>
+                                <th>@user.Name</th>
+                                <th>@user.Phone</th>
+                                <th>@user.Email</th>
+                                <td>
+                                    @foreach (var play in plays)
+                                    {
+                                        foreach (var date in dates)
+                                        {
+                                            if (play.Id == date.PlayId && date.Id == item.DateId)
+                                            {
+                                                @play.Name
+                                                datePlay = date.Date;
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>@datePlay.ToShortDateString()</td>
+                                <td>@item.Category</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price</td>
+                                <td>
+                                    <div class="col-lg-10">
+                                        <select name="statusId" class="form-control" id="select">
+                                            <option disabled selected>@item.Status</option>
+                                            <option value="0">@StatusOrder.NotСonfirmed</option>
+                                            <option value="1">@StatusOrder.Performing</option>
+                                            <option value="2">@StatusOrder.Completed</option>
+                                        </select>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <button name="orderId" value=@item.Id type="submit" class="btn btn-primary">@Resources.Resource.Change</button>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    else
+    {
+        <h3>@Resources.Resource.NoOrders</h3>
+    }
+</body>
+</html>

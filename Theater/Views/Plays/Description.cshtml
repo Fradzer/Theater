@@ -1,0 +1,42 @@
+﻿@using Theater.Models.Plays;
+@{
+    Play play = ViewBag.Play;
+    Genre genrePlay = ViewBag.Genre;
+    Author authorPlay = ViewBag.Author;
+    List<DatePlay> datesPlay = ViewBag.Dates;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Description</title>
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <h3>@Html.ActionLink(play.Name, "Description", "Plays", new { id = play.Id }, new { @class = "" })</h3>
+            <h4>@Resources.Resource.Genre: @genrePlay.Name</h4>
+            <h4>@Resources.Resource.Author: @authorPlay.Name</h4>
+            <ul class="pagination">
+                @foreach (var date in datesPlay)
+                {
+                    <li>
+                        @Html.ActionLink(date.Date.ToShortDateString(), "Order", "Plays", new { id = date.Id }, new { @class = "" })
+                    </li>
+
+                }
+            </ul>
+        </div>
+        <div class="col-lg-8">
+            <blockquote>
+                <h2>@Resources.Resource.Description</h2>
+                <p>@play.Description</p>
+            </blockquote>
+        </div>
+    </div>
+
+</body>
+</html>

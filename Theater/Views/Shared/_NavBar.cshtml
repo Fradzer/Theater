@@ -1,0 +1,86 @@
+﻿@using Theater.Models
+
+@if (User.Identity.IsAuthenticated)
+{
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                @Html.ActionLink(@Resources.Resource.Logo, "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-text">
+                    <li>@Resources.Resource.User: @CurrentUserService.GetCurrentUser().Name</li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (CurrentUserService.GetCurrentUser().Role == Theater.Models.Account.Role.Сourier)
+                    {
+                    <li>
+                        @Html.ActionLink(@Resources.Resource.Orders, "Orders", "Courier", null, null)
+                    </li>
+                    }
+                    <li>
+                        @Html.ActionLink(@Resources.Resource.Cart, "Cart", "Account", null, null)
+                    </li>
+                    <li>
+                        @Html.ActionLink(@Resources.Resource.Logout, "Logout", "Account", null, null)
+                    </li>
+
+                    <li>
+                        @using (Html.BeginForm("ChangeLang", "Home"))
+                        {
+
+                        <select name="lang" value=@HttpContext.Current.Session["Lang"]>
+                            <option disabled selected>@HttpContext.Current.Session["Lang"]</option>
+                            <option value="ru">ru</option>
+                            <option value="en">en</option>
+                        </select>
+                        <input type="submit" name="submit" value=@Resources.Resource.Choose>
+
+                        }
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+else
+{
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                @Html.ActionLink(@Resources.Resource.Logo, "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-text">
+                    <li>@Resources.Resource.User: @Resources.Resource.Guest</li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.ActionLink(@Resources.Resource.Registration, "Register", "Account", null, null)
+                    </li>
+                    <li>
+                        @Html.ActionLink(@Resources.Resource.Login, "Login", "Account", null, null)
+                    </li>
+                    <li>
+                        @using (Html.BeginForm("ChangeLang", "Home"))
+                        {
+
+                        <select name="lang">
+                            <option disabled selected>@HttpContext.Current.Session["Lang"]</option>
+                            <option value="ru">ru</option>
+                            <option value="en">en</option>
+                        </select>
+                        <input type="submit" name="submit" value=@Resources.Resource.Choose>
+
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}

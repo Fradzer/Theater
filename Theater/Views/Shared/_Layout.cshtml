@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap-lumen.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10">
+                @Html.Partial("_NavBar")
+
+                @RenderBody()
+
+                @Html.Partial("_Footer")
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+﻿@using Theater.WorkingDb.Connections
+@using Theater.Models.Plays
+
+@{
+    int dateId = ViewBag.DateId;
+
+    Play play = ViewBag.Play;
+    Genre genrePlay = ViewBag.Genre;
+    Author authorPlay = ViewBag.Author;
+    List<DatePlay> datesPlay = ViewBag.Dates;
+
+    decimal priceBalconySeats = ViewBag.PriceBalconySeats;
+    int freeBalconySeats = ViewBag.FreeBalconySeats;
+    int totalCountBalconySeats = ViewBag.TotalCountBalconySeats;
+
+    decimal priceParterreSeats = ViewBag.PriceParterreSeats;
+    int freeParterreSeats = ViewBag.FreeParterreSeats;
+    int totalCountParterreSeats = ViewBag.TotalCountParterreSeats;
+
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap-lumen.css" rel="stylesheet" />
+
+    <title>Order</title>
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <h3>@Html.ActionLink(play.Name, "Description", "Plays", new { id = play.Id }, new { @class = "" })</h3>
+            <h4>@Resources.Resource.Genre: @genrePlay.Name</h4>
+            <h4>@Resources.Resource.Author: @authorPlay.Name</h4>
+            <ul class="pagination">
+                @foreach (var date in datesPlay)
+                {
+                    if (date.Id == dateId)
+                    {
+                        <li class="active">
+                            @Html.ActionLink(date.Date.ToShortDateString(), "Order", "Plays", new { id = date.Id }, new { @class = "" })
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink(date.Date.ToShortDateString(), "Order", "Plays", new { id = date.Id }, new { @class = "" })
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="col-lg-8">
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th>@Resources.Resource.Category</th>
+                        <th>@Resources.Resource.Price</th>
+                        <th>@Resources.Resource.TotalTickets</th>
+                        <th>@Resources.Resource.AvailableTickents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Resources.Resource.Balcony</td>
+                        <td>@priceBalconySeats</td>
+                        <td>@totalCountBalconySeats</td>
+                        <td>@freeBalconySeats</td>
+                    </tr>
+                    <tr>
+                        <td>@Resources.Resource.Parterre</td>
+                        <td>@priceParterreSeats</td>
+                        <td>@totalCountParterreSeats</td>
+                        <td>@freeParterreSeats</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+            @if (User.Identity.IsAuthenticated)
+            {
+                using (Html.BeginForm("Order", "Plays", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label for="select" class="col-lg-2 control-label">@Resources.Resource.Category</label>
+                        <div class="col-lg-5">
+                            <select name="Category" class="form-control" id="select">
+                                <option value="0">@Resources.Resource.Balcony</option>
+                                <option value="1">@Resources.Resource.Parterre</option>
+                            </select>
+
+                        </div>
+                    </div>
+                            <div class="form-group">
+                                <label for="inputQuantity" class="col-lg-2 control-label">@Resources.Resource.Quantity</label>
+                                <div class="col-lg-4">
+                                    <input name="Quantity" type="text" class="form-control" id="inputEmail" placeholder=@Resources.Resource.Quantity maxlength="3">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    @Html.ActionLink(@Resources.Resource.Cancel, "Index", "Home", null, new { @class = "btn btn-default" })
+                                    <button name="dateId" type="submit" class="btn btn-primary" value=@dateId>@Resources.Resource.Order</button>
+                                </div>
+                            </div>
+                }
+            }
+            else
+            {
+                <h4>@Resources.Resource.ErrorNoRegistration</h4>
+            }
+        </div>
+    </div>
+
+</body>
+</html>
