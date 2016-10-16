@@ -17,7 +17,10 @@
 </head>
 <body>
     @foreach (var play in plays)
-            {
+    {
+        var playDates = dates.Where(x => x.PlayId == play.Id).ToList();
+        if (playDates != null && playDates.Count > 0)
+        {
         <div class="text-center">
             <h3>@Html.ActionLink(play.Name, "Description", "Plays", new { id = play.Id }, new { @class = "" })</h3>
 
@@ -46,7 +49,7 @@
                 }
             </h4>
             <ul class="pagination">
-                @foreach (var date in dates)
+                @foreach (var date in playDates)
                 {
                     if (date.PlayId == play.Id)
                     {
@@ -57,7 +60,7 @@
                 }
             </ul>
         </div>
-
+        }
     }
 </body>
 </html>

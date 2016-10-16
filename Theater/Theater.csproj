@@ -89,11 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\TheaterDb.mdf" />
-    <Content Include="App_Data\TheaterDb_log.ldf">
-      <DependentUpon>TheaterDb.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\TheaterXml.xml" />
+    <Content Include="App_Data\CreateAndFillDB.sql" />
     <Content Include="Content\bootstrap-lumen.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -126,10 +122,7 @@
     <Compile Include="Models\Attributes\CultureAttribute.cs" />
     <Compile Include="Models\CurrentUserService.cs" />
     <Compile Include="Models\Plays\Order.cs" />
-    <Compile Include="Models\Theater\PriceCollection.cs" />
-    <Compile Include="Models\Theater\PricePlay.cs" />
     <Compile Include="Models\Theater\TheaterInformation.cs" />
-    <Compile Include="Models\Theater\TypeSeat.cs" />
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,7 +159,6 @@
     <Compile Include="WorkingDb\Interfaces\IOrderDao.cs" />
     <Compile Include="WorkingDb\Interfaces\IPlayDao.cs" />
     <Compile Include="WorkingDb\Connections\DatesTableConnection.cs" />
-    <Compile Include="WorkingXml\TheaterTotal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

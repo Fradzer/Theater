@@ -9,7 +9,6 @@ using System.Web.Security;
 using Theater.Models;
 using Theater.Models.Theater;
 using Theater.WorkingDb.Connections;
-using Theater.WorkingXml;
 
 namespace Theater
 {
@@ -20,7 +19,6 @@ namespace Theater
             
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            TheaterTotal.ReadFromXml();
         }
 
         protected void Application_AuthenticateRequest(Object sender, EventArgs e)

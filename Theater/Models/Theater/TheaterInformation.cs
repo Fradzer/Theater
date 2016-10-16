@@ -8,43 +8,15 @@ namespace Theater.Models.Theater
 {
     public static class TheaterInformation
     {
-        private static TypeSeat parterre = new TypeSeat();
-        private static TypeSeat balcony = new TypeSeat();
-        private static PriceCollection prices = new PriceCollection();
+        public static decimal PriceBalcony = 50000;
+        public static decimal PriceParterre = 35000;
+        public static int TotalCountBalconySeats = 50;
+        public static int TotalCountParterreSeats = 50;
 
-        public static TypeSeat Parterre
+        internal static decimal GetPriceByCategoryId(int category)
         {
-            get
-            {
-                return parterre;
-            }
-            set
-            {
-                parterre = value;
-            }
+            if (category == 1) return PriceParterre;
+            else  return PriceBalcony;            
         }
-        public static TypeSeat Balcony
-        {
-            get
-            {
-                return balcony;
-            }
-            set
-            {
-                balcony = value;
-            }
-        }
-        public static PriceCollection Prices
-        {
-            get
-            {
-                return prices;
-            }
-            set
-            {
-                prices = value;
-            }
-        }
-       
     }
 }

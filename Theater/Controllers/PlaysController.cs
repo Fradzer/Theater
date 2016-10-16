@@ -97,7 +97,7 @@ namespace Theater.Controllers
                                     CurrentUserService.GetCurrentUser().Id,
                                     (int)order.Category,
                                     order.Quantity,
-                                    TheaterInformation.Prices.GetPricesByNameAndCategoryId(play.Name, (int)order.Category) * order.Quantity,
+                                    TheaterInformation.GetPriceByCategoryId((int)order.Category) * order.Quantity,
                                     0));
                     return View("OrderAccepted");
                 }
@@ -152,14 +152,14 @@ namespace Theater.Controllers
 
             ViewBag.Dates = datesDb.GetDatesByIdPlay(play.Id).OrderBy(x => x.Date).ToList();
 
-            ViewBag.TotalCountBalconySeats = TheaterInformation.Balcony.CountSeats;
-            ViewBag.PriceBalconySeats = TheaterInformation.Prices.GetPricesByName(play.Name).PriceBalcony;
-            ViewBag.FreeBalconySeats = (TheaterInformation.Balcony.CountSeats -
+            ViewBag.TotalCountBalconySeats = TheaterInformation.TotalCountBalconySeats;
+            ViewBag.PriceBalconySeats = TheaterInformation.PriceBalcony;
+            ViewBag.FreeBalconySeats = (TheaterInformation.TotalCountBalconySeats -
                                     orders.GetCountBusySeetsByDateIdAndCategory(id, 0));
 
-            ViewBag.TotalCountParterreSeats = TheaterInformation.Parterre.CountSeats;
-            ViewBag.PriceParterreSeats = TheaterInformation.Prices.GetPricesByName(play.Name).PriceParterre;
-            ViewBag.FreeParterreSeats = (TheaterInformation.Parterre.CountSeats -
+            ViewBag.TotalCountParterreSeats = TheaterInformation.TotalCountParterreSeats;
+            ViewBag.PriceParterreSeats = TheaterInformation.PriceParterre;
+            ViewBag.FreeParterreSeats = (TheaterInformation.TotalCountParterreSeats -
                                     orders.GetCountBusySeetsByDateIdAndCategory(id, 1));
         }
 
@@ -172,8 +172,8 @@ namespace Theater.Controllers
         /// <returns>If order correct return true, else false</returns>
         private bool isTrueOrder(Order order, IOrderDao orders, int dateId)
         {
-            int count1 = TheaterInformation.Balcony.CountSeats - orders.GetCountBusySeetsByDateIdAndCategory(dateId, 0);
-            int count2 = TheaterInformation.Parterre.CountSeats - orders.GetCountBusySeetsByDateIdAndCategory(dateId, 1);
+            int count1 = TheaterInformation.TotalCountBalconySeats - orders.GetCountBusySeetsByDateIdAndCategory(dateId, 0);
+            int count2 = TheaterInformation.TotalCountParterreSeats - orders.GetCountBusySeetsByDateIdAndCategory(dateId, 1);
 
             return (((order.Category == Category.Balcony && order.Quantity < count1) ||
                     (order.Category == Category.Parterre && order.Quantity < count2))
