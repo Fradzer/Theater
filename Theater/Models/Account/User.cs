@@ -8,7 +8,8 @@ namespace Theater.Models.Account
     public enum Role
     {
         Customer = 0,
-        Сourier = 1
+        Сourier = 1,
+        Admin = 2
     }
     public class User
     {

@@ -145,8 +145,7 @@ BEGIN
 	SET @UserEmail = @FirstPartEmail+'@'+@SecondPartEmail
 	INSERT INTO logins(name, password, roleId, email, phone)
 
-	VALUES (@UserName, @UserPassword, @UserRole,
-	 @UserEmail, @UserPhone)
+	VALUES (@UserName, @UserPassword, @UserRole, @UserEmail, @UserPhone)
 	SET @CountLogins += 1
 	SET @i += 1
 	SET @j = 0	
@@ -158,6 +157,8 @@ BEGIN
 	SET @SecondPartEmail = ''
 	SET @UserPhone = '+'
 END
+INSERT INTO logins(name, password, roleId, email, phone)
+	VALUES ('admin', 'admin', 2, 'admin@admin.ru', +37555555)
 SET @i = 0
 
 ------------Fill plays table ///////////////////////////////////
