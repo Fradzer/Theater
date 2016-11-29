@@ -20,6 +20,17 @@ namespace Theater.WorkingDb.Connections
                                          FROM plays
                                          WHERE Id=@Id";
 
+        private string deletePalyById = @"DELETE FROM plays
+                                         WHERE Id=@Id";
+
+        private string updatePlayById = @"UPDATE plays
+                                         SET name=@name, authorId=@authorId, genreId=@genreId, description=@description
+                                         WHERE Id=@Id";
+
+        private string createPlay = @"INSERT plays(name, authorId, genreId, description)
+                                         VALUES(@name, @authorId, @genreId, @description)";
+
+
         private static PlaysTableConnection instance;
         public static PlaysTableConnection Instance
         {
@@ -84,6 +95,52 @@ namespace Theater.WorkingDb.Connections
                 }
             }
             return null;
+        }
+
+        public void DeleteById(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(deletePalyById, connection);
+
+                command.Parameters.AddWithValue("@Id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Create(Play play)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(createPlay, connection);
+
+                command.Parameters.AddWithValue("@name", play.Name);
+                command.Parameters.AddWithValue("@authorId", play.AuthorId);
+                command.Parameters.AddWithValue("@genreId", play.GenreId);
+                command.Parameters.AddWithValue("@description", play.Description);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Update(Play play)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(updatePlayById, connection);
+
+                command.Parameters.AddWithValue("@Id", play.Id);
+                command.Parameters.AddWithValue("@name", play.Name);
+                command.Parameters.AddWithValue("@authorId", play.AuthorId);
+                command.Parameters.AddWithValue("@genreId", play.GenreId);
+                command.Parameters.AddWithValue("@description", play.Description);
+
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

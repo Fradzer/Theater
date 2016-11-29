@@ -173,7 +173,74 @@ namespace Theater.Controllers
         }
         #endregion
 
-      
+        #region PlaysCrud
+        public ActionResult PlaysTable(int page = 1)
+        {
+            List<Play> plays = playsDb.GetAllPlays();
+            Hashtable idAndCountInPlays = new Hashtable();
+            plays.ForEach(play => idAndCountInPlays.Add(play.Id, datesDb.GetDatesByIdPlay(play.Id).Count()));
+            ViewBag.idAndCountInPlay = idAndCountInPlays;
+
+            page = truePage(page, (int)Math.Ceiling((double)plays.Count / pageSize));
+
+            return View(plays.ToPagedList(page, pageSize));
+        }
+
+        
+
+        [HttpPost]
+        public ActionResult PlayDelete(int id)
+        {
+            try
+            {
+                if (playsDb.GetPlayById(id) != null)
+                {
+                    playsDb.DeleteById(id);
+                    ModelState.AddModelError("Completed", Resources.Resource.Completed);
+
+                }
+                else
+                {
+                    ModelState.AddModelError("Not found play", Resources.Resource.ErrorFound);
+                }
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+            catch
+            {
+                ModelState.AddModelError("Error Delete", Resources.Resource.Error);
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult CreatePlay(Play play)
+        {
+            try
+            {
+                playsDb.Create(play);
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+        }
+        [HttpPost]
+        public ActionResult PlayUpdate(Play play)
+        {
+            try
+            {
+                playsDb.Update(play);
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+            catch
+            {
+                ModelState.AddModelError("Error Update", Resources.Resource.Error);
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+        }
+        #endregion
 
 
         public ActionResult DatesTable()

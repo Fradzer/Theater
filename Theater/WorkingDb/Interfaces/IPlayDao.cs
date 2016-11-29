@@ -21,7 +21,8 @@ namespace Theater.WorkingDb.Interfaces
         /// <param name="id">play id</param>
         /// <returns>return play by id</returns>
         Play GetPlayById(int id);
-
-
+        void DeleteById(int id);
+        void Create(Play play);
+        void Update(Play play);
     }
 }

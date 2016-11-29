@@ -8,6 +8,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     Hashtable idAndCount = ViewBag.idAndCountInPlay;
 }
+<title>Authors</title>
+
+@Html.ActionLink(Resources.Resource.Back, "Index", "Admin", null, new { @class = "btn btn-link" })
+
 
 @Html.ValidationSummary("", new { @class = "text-danger" })
 <div class="row">
