@@ -242,11 +242,95 @@ namespace Theater.Controllers
         }
         #endregion
 
-
-        public ActionResult DatesTable()
+        #region DatePlaysCrud
+        public ActionResult DatePlaysTable(int page = 1)
         {
-            return View();
+            List<DatePlay> dates = datesDb.GetAllDates();            
+
+            page = truePage(page, (int)Math.Ceiling((double)dates.Count / pageSize));
+
+            return View(dates.ToPagedList(page, pageSize));
         }
+
+
+
+        [HttpPost]
+        public ActionResult DatePlayDelete(int id)
+        {
+            try
+            {
+                if (datesDb.GetDateById(id) != null)
+                {
+                    datesDb.DeleteById(id);
+                    ModelState.AddModelError("Completed", Resources.Resource.Completed);
+
+                }
+                else
+                {
+                    ModelState.AddModelError("Not found date", Resources.Resource.ErrorFound);
+                }
+                return RedirectToAction("DatePlaysTable", "Admin");
+            }
+            catch
+            {
+                ModelState.AddModelError("Error Delete", Resources.Resource.Error);
+                return RedirectToAction("DatePlaysTable", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult CreateDatePlay(DatePlay date, string dateCheck)
+        {
+            try
+            {
+                DateTime newDate;
+                if (DateTime.TryParse(dateCheck, out newDate) &&
+                    datesDb.GetAllDates().Where(datePlay => datePlay.Date == newDate).Count() == 0)
+                {
+                    date.Date = newDate;
+                    datesDb.Create(date);
+                    return RedirectToAction("DatePlaysTable", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                    return RedirectToAction("DatePlaysTable", "Admin");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                return RedirectToAction("DatePlaysTable", "Admin");
+            }
+        }
+        [HttpPost]
+        public ActionResult DatePlayUpdate(DatePlay date, string dateCheck)
+        {
+            try
+            {
+                DateTime newDate;
+                if (DateTime.TryParse(dateCheck, out newDate) &&
+                    datesDb.GetAllDates().Where(datePlay => datePlay.Date == newDate).Count() == 0)
+                {
+                    date.Date = newDate;
+                    datesDb.Update(date);
+                    return RedirectToAction("DatePlaysTable", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                    return RedirectToAction("DatePlaysTable", "Admin");
+                }
+            }
+            catch(Exception e)
+            {
+                ModelState.AddModelError("Error Update", Resources.Resource.Error);
+                return RedirectToAction("DatePlaysTable", "Admin");
+            }
+        }
+        #endregion
+
+
         private int truePage(int page, int pageCount)
         {
             if (page < 1)

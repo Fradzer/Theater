@@ -29,5 +29,8 @@ namespace Theater.WorkingDb.Interfaces
         /// <param name="id">date id</param>
         /// <returns>return date by id</returns>
         DatePlay GetDateById(int id);
+        void DeleteById(int id);
+        void Create(DatePlay date);
+        void Update(DatePlay date);
     }
 }

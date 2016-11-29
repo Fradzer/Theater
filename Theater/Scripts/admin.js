@@ -14,3 +14,10 @@ function FillUpdateFormPlay(id) {
     $("#description-update").val($("#description__" + id).text());
     $("#update-form").removeClass("hide");
 }
+
+function FillUpdateFormDatePlay(id) {
+    $("#id-update").val(id);
+    $("#playId-update").val($("#playId__" + id).text());
+    $("#date-update").val($("#date__" + id).text());
+    $("#update-form").removeClass("hide");
+}

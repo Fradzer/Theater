@@ -1,0 +1,128 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Theater.Models.Plays;
+@using System.Collections;
+@model IPagedList<DatePlay>
+@{
+    ViewBag.Title = "DatePlaysTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>DatePlays</title>
+@Html.ActionLink(Resources.Resource.Back, "Index", "Admin", null, new { @class = "btn btn-link" })
+<p><span class="label label-info">@Resources.Resource.InfoDatePlay</span></p>
+
+
+@Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="row">
+
+    <div class="col-lg-6">
+        @using (Html.BeginForm("CreateDatePlay", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+            <form class="form-horizontal">
+                <fieldset>
+
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label for="PlayId" class="col-lg-2 control-label">@Resources.Resource.Play Id</label>
+                        <div class="col-lg-5">
+                            <input name="PlayId" type="number" class="form-control" id="input-playId" placeholder="@Resources.Resource.Play Id">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateCheck" class="col-lg-2 control-label">@Resources.Resource.Date</label>
+                        <div class="col-lg-5">
+                            <input name="dateCheck" type="text" class="form-control" id="input-date" placeholder=@Resources.Resource.Date>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">@Resources.Resource.Create</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        }
+    </div>
+    <div class="col-lg-6 hide" id="update-form">
+        @using (Html.BeginForm("DatePlayUpdate", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+            <form class="form-horizontal">
+                <fieldset>
+
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label for="Id" class="col-lg-2 control-label">@Resources.Resource.Id</label>
+                        <div class="col-lg-5">
+                            <input name="Id" type="number" class="form-control" id="id-update" placeholder="@Resources.Resource.Id" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="PlayId" class="col-lg-2 control-label">@Resources.Resource.Play Id</label>
+                        <div class="col-lg-5">
+                            <input name="PlayId" type="number" class="form-control" id="playId-update" placeholder="@Resources.Resource.Play Id">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateCheck" class="col-lg-2 control-label">@Resources.Resource.Date</label>
+                        <div class="col-lg-5">
+                            <input name="dateCheck" type="text" class="form-control" id="date-update" placeholder="@Resources.Resource.Date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">@Resources.Resource.Update</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        }
+    </div>
+</div>
+
+
+<table class="table table-striped table-hover sortable">
+    <thead>
+        <tr>
+            <th>@Resources.Resource.Id</th>
+            <th>@Resources.Resource.Play Id</th>
+            <th>@Resources.Resource.Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var date in Model)
+            {
+            <tr>
+                <td class="id" id="id__@date.Id">@date.Id</td>
+                <td class="authorId" id="playId__@date.Id">@date.PlayId</td>
+                <td class="name" id="date__@date.Id">@date.Date.ToShortDateString()</td>
+                <td class="buttons-action">
+                    <div class="btn-group">
+
+                        @using (Html.BeginForm("DatePlayDelete", "Admin", new { id = date.Id }, FormMethod.Post, new { @class = "form-delete" }))
+                        {
+                            <button type="submit" class="btn btn-default">@Resources.Resource.Delete</button>
+                        }
+
+                        <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="update-date" onclick="FillUpdateFormDatePlay(@date.Id)">@Resources.Resource.Update</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Resources.Resource.Page @(Model.PageCount < Model.PageNumber ? Model.PageCount : 1) @Resources.Resource.of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("DatePlaysTable", "Admin", new { page }))

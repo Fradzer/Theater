@@ -25,6 +25,17 @@ namespace Theater.WorkingDb.Connections
                                          FROM dates
                                          WHERE Id=@Id";
 
+        private string deleteDateById = @"DELETE FROM dates
+                                         WHERE Id=@Id";
+
+        private string updateDateById = @"UPDATE dates
+                                         SET playsId=@playId, date=@date
+                                         WHERE Id=@Id";
+
+        private string createDate = @"INSERT dates(playsId, date)
+                                         VALUES(@playId, @date)";
+
+
         private static DatesTableConnection instance = null;
         public static DatesTableConnection Instance
         {
@@ -106,6 +117,48 @@ namespace Theater.WorkingDb.Connections
                 }
             }
             return null;
-        }     
+        }
+
+        public void DeleteById(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(deleteDateById, connection);
+
+                command.Parameters.AddWithValue("@Id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Create(DatePlay date)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(createDate, connection);
+
+                command.Parameters.AddWithValue("@playId", date.PlayId);
+                command.Parameters.AddWithValue("@date", date.Date);                
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Update(DatePlay date)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(updateDateById, connection);
+
+                command.Parameters.AddWithValue("@Id", date.Id);
+                command.Parameters.AddWithValue("@playId", date.PlayId);
+                command.Parameters.AddWithValue("@date", date.Date);
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
