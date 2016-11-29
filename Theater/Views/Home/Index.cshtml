@@ -1,12 +1,15 @@
 ﻿@using Theater.Models.Plays;
+@using PagedList;
+@using PagedList.Mvc;
 
 @{
     List<DatePlay> dates = (List<DatePlay>)ViewBag.Dates;
     List<Genre> genres = (List<Genre>)ViewBag.Genres;
     List<Author> authors = (List<Author>)ViewBag.Authors;
-    List<Play> plays = (List<Play>)ViewBag.Plays;
+    IPagedList<Play> plays = ViewBag.Plays;
 
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <!DOCTYPE html>
@@ -61,6 +64,8 @@
             </ul>
         </div>
         }
-    }
+    }    
+    @Resources.Resource.Page @(plays.PageCount < plays.PageNumber ? 0 : plays.PageNumber) @Resources.Resource.of @plays.PageCount
+    @Html.PagedListPager(plays, page => Url.Action("Index", new { page }))
 </body>
 </html>

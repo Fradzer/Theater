@@ -11,26 +11,43 @@ using Theater.Models.Attribute;
 using Theater.Models.Plays;
 using Theater.WorkingDb.Connections;
 using Theater.WorkingDb.Interfaces;
+using PagedList;
 
 namespace Theater.Controllers
 {
     [Culture]
     public class HomeController : Controller
     {
-        // GET: Home
-        public ActionResult Index()
-        {
-            IPlayDao playsDb = PlaysTableConnection.Instance;
-            ViewBag.Plays = playsDb.GetAllPlays();
 
-            IAuthorDao authorsDb = AuthorsTableConnection.Instance;             
+        private static IDateDao datesDb;
+        private static IPlayDao playsDb;
+        private static IAuthorDao authorsDb;
+        private static IGenreDao genresDb;
+
+        private static int pageSize = 5;
+
+        public HomeController()
+        {
+            authorsDb = AuthorsTableConnection.Instance;
+            genresDb = GenresTableConnection.Instance;
+            datesDb = DatesTableConnection.Instance;
+            playsDb = PlaysTableConnection.Instance;
+        }
+        // GET: Home
+        public ActionResult Index(int page = 1)
+        {
             ViewBag.Authors = authorsDb.GetAllAuthors();
 
-            IGenreDao genresDb = GenresTableConnection.Instance;             
             ViewBag.Genres = genresDb.GetAllGenres();
 
-            IDateDao datesDb = DatesTableConnection.Instance;
-            ViewBag.Dates = datesDb.GetAllDates().OrderBy(x => x.Date).ToList();
+            List<DatePlay> sortedDates = datesDb.GetAllDates().OrderBy(x => x.Date).ToList();
+            ViewBag.Dates = sortedDates;
+
+            var sortedPlays = playsDb.GetAllPlays().OrderBy(a => a.Id).ToList()
+                            .Where(play => sortedDates.Where(date=> date.PlayId == play.Id).Count() > 0);
+
+            ViewBag.Plays = sortedPlays.ToPagedList(page, pageSize);
+
 
             return View();
         }

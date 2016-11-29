@@ -12,9 +12,22 @@ using Theater.Models.Account;
 namespace Theater.Controllers
 {
     [Culture]
-    [Authorize(Roles = "Сourier")]
+    [Authorize(Roles = "Сourier, Admin")]
     public class CourierController : Controller
     {
+        private static ILoginDao loginsDb;
+        private static IDateDao datesDb;
+        private static IOrderDao ordersDb;
+        private static IPlayDao playsDb;
+
+        public CourierController()
+        {
+            loginsDb = LoginsTableConnection.Instance;
+            datesDb = DatesTableConnection.Instance;
+            ordersDb = OrdersTableConnection.Instance;
+            playsDb = PlaysTableConnection.Instance;
+        }
+
         // GET: Courier
         public ActionResult Index()
         {
@@ -24,17 +37,12 @@ namespace Theater.Controllers
         // GET: Courier/Orders
         public ActionResult Orders()
         {
-            IDateDao datesDb = DatesTableConnection.Instance;
             ViewBag.Dates = datesDb.GetAllDates();
 
-            IOrderDao ordersDb = OrdersTableConnection.Instance;
-            List<Order> orders = ordersDb.GetAllOrders().OrderBy(x => datesDb.GetDateById(x.DateId).Date).ToList();
-            
+            List<Order> orders = ordersDb.GetAllOrders().OrderBy(x => datesDb.GetDateById(x.DateId).Date).ToList();            
 
-            IPlayDao playsDb = PlaysTableConnection.Instance;
             ViewBag.Plays = playsDb.GetAllPlays();
 
-            ILoginDao loginsDb = LoginsTableConnection.Instance;
             ViewBag.Logins = loginsDb.GetAllLogins();
 
             return View(orders);
@@ -45,8 +53,7 @@ namespace Theater.Controllers
         {
             if (statusId != null)
             {
-                IOrderDao orders = OrdersTableConnection.Instance;
-                orders.UpdateOrderStatusById(orderId, (int)statusId);
+                ordersDb.UpdateOrderStatusById(orderId, (int)statusId);
             }
             return RedirectToAction("Orders", "Courier");
         }

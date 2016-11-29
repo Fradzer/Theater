@@ -14,7 +14,9 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    @if (CurrentUserService.GetCurrentUser().Role == Theater.Models.Account.Role.Сourier)
+                    @if (CurrentUserService.GetCurrentUser().Role == Theater.Models.Account.Role.Сourier ||
+                        CurrentUserService.GetCurrentUser().Role == Theater.Models.Account.Role.Admin
+                        )
                     {
                     <li>
                         @Html.ActionLink(@Resources.Resource.Orders, "Orders", "Courier", null, null)
@@ -28,17 +30,17 @@
                     </li>
 
                     <li>
-                        @using (Html.BeginForm("ChangeLang", "Home"))
-                        {
-
-                        <select name="lang" value=@HttpContext.Current.Session["Lang"]>
-                            <option disabled selected>@HttpContext.Current.Session["Lang"]</option>
-                            <option value="ru">ru</option>
-                            <option value="en">en</option>
-                        </select>
-                        <input type="submit" name="submit" value=@Resources.Resource.Choose>
-
-                        }
+                        <div class="choose-lang">
+                            @using (Html.BeginForm("ChangeLang", "Home"))
+                            {
+                                <select name="lang" value=@HttpContext.Current.Session["Lang"]>
+                                    <option disabled selected>@HttpContext.Current.Session["Lang"]</option>
+                                    <option value="ru">ru</option>
+                                    <option value="en">en</option>
+                                </select>
+                                <input type="submit" name="submit" value=@Resources.Resource.Choose>
+                            }
+                        </div>
                     </li>
 
                 </ul>
@@ -67,17 +69,17 @@ else
                         @Html.ActionLink(@Resources.Resource.Login, "Login", "Account", null, null)
                     </li>
                     <li>
-                        @using (Html.BeginForm("ChangeLang", "Home"))
-                        {
-
-                        <select name="lang">
-                            <option disabled selected>@HttpContext.Current.Session["Lang"]</option>
-                            <option value="ru">ru</option>
-                            <option value="en">en</option>
-                        </select>
-                        <input type="submit" name="submit" value=@Resources.Resource.Choose>
-
-                        }
+                        <div class="choose-lang">
+                            @using (Html.BeginForm("ChangeLang", "Home"))
+                            {
+                                <select name="lang">
+                                    <option disabled selected>@HttpContext.Current.Session["Lang"]</option>
+                                    <option value="ru">ru</option>
+                                    <option value="en">en</option>
+                                </select>
+                                <input type="submit" name="submit" value=@Resources.Resource.Choose>
+                            }
+                        </div>
                     </li>
                 </ul>
             </div>

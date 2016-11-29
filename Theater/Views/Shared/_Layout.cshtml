@@ -1,7 +1,8 @@
 ﻿
 @{
     Layout = null;
-}
+   
+        }
 
 <!DOCTYPE html>
 
@@ -9,7 +10,13 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <link href="~/Content/bootstrap-lumen.css" rel="stylesheet" />
-</head>
+    <script type="text/javascript" src="~/Scripts/sorttable.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-1.9.1.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="~/Content/Site.css" />
+    @RenderSection("JavaScript", required: false)
+    </head>
 <body>
     <div>
         <div class="row">

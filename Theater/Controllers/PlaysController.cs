@@ -16,6 +16,22 @@ namespace Theater.Controllers
     [Culture]
     public class PlaysController : Controller
     {
+        private static ILoginDao loginsDb;
+        private static IDateDao datesDb;
+        private static IOrderDao ordersDb;
+        private static IPlayDao playsDb;
+        private static IAuthorDao authorsDb;
+        private static IGenreDao genresDb;
+
+        public PlaysController()
+        {
+            loginsDb = LoginsTableConnection.Instance;
+            datesDb = DatesTableConnection.Instance;
+            ordersDb = OrdersTableConnection.Instance;
+            playsDb = PlaysTableConnection.Instance;
+            authorsDb = AuthorsTableConnection.Instance;
+            genresDb = GenresTableConnection.Instance;
+        }
 
         // GET: Plays
         public ActionResult Index()
@@ -28,17 +44,13 @@ namespace Theater.Controllers
         {
             try
             {
-                IPlayDao playsDb = PlaysTableConnection.Instance;
                 Play play = playsDb.GetPlayById(id);
                 ViewBag.Play = play;
 
-                IGenreDao genresDb = GenresTableConnection.Instance;
                 ViewBag.Genre = genresDb.GetGenreById(play.GenreId);
 
-                IAuthorDao authorsDb = AuthorsTableConnection.Instance;
                 ViewBag.Author = authorsDb.GetAuthorById(play.AuthorId);
 
-                IDateDao datesDb = DatesTableConnection.Instance;
                 ViewBag.Dates = datesDb.GetDatesByIdPlay(play.Id).OrderBy(x => x.Date).ToList();
             }
             catch (NullReferenceException)
@@ -67,12 +79,8 @@ namespace Theater.Controllers
         [HttpPost]
         [Authorize]
         public ActionResult Order(Order order, int dateId)
-        {
-
-            IDateDao dates = DatesTableConnection.Instance;
-            IOrderDao orders = OrdersTableConnection.Instance;
-
-            DatePlay date = dates.GetDateById(dateId);
+        {            
+            DatePlay date = datesDb.GetDateById(dateId);
             Play play = PlaysTableConnection.Instance.GetPlayById(date.PlayId);
 
             getViewBagForOrderPage(dateId);
@@ -83,7 +91,7 @@ namespace Theater.Controllers
                 return View();
             }
 
-            if (!isTrueOrder(order, orders, dateId))
+            if (!isTrueOrder(order, dateId))
             {
                 ModelState.AddModelError("Error order!", Resources.Resource.ErrorOrderNumber);
                 return View();
@@ -92,7 +100,7 @@ namespace Theater.Controllers
             {
                 try
                 {
-                    orders.AddOrder(new Order(0,
+                    ordersDb.AddOrder(new Order(0,
                                             dateId,
                                     CurrentUserService.GetCurrentUser().Id,
                                     (int)order.Category,
@@ -115,8 +123,7 @@ namespace Theater.Controllers
         [Authorize]
         public ActionResult DeleteOrder(int orderId)
         {
-            IOrderDao orders = OrdersTableConnection.Instance;
-            orders.DeleteOrderById(orderId);
+            ordersDb.DeleteOrderById(orderId);
             return RedirectToAction("Cart", "Account");
         }
 
@@ -135,19 +142,14 @@ namespace Theater.Controllers
         {
             ViewBag.DateId = id;
 
-            IOrderDao orders = OrdersTableConnection.Instance;
 
-            IDateDao datesDb = DatesTableConnection.Instance;
             DatePlay currentDate = datesDb.GetDateById(id);
 
-            IPlayDao playsDb = PlaysTableConnection.Instance;
             Play play = playsDb.GetPlayById(currentDate.PlayId);
             ViewBag.Play = play;
 
-            IGenreDao genresDb = GenresTableConnection.Instance;
             ViewBag.Genre = genresDb.GetGenreById(play.GenreId);
 
-            IAuthorDao authorsDb = AuthorsTableConnection.Instance;
             ViewBag.Author = authorsDb.GetAuthorById(play.AuthorId);
 
             ViewBag.Dates = datesDb.GetDatesByIdPlay(play.Id).OrderBy(x => x.Date).ToList();
@@ -155,12 +157,12 @@ namespace Theater.Controllers
             ViewBag.TotalCountBalconySeats = TheaterInformation.TotalCountBalconySeats;
             ViewBag.PriceBalconySeats = TheaterInformation.PriceBalcony;
             ViewBag.FreeBalconySeats = (TheaterInformation.TotalCountBalconySeats -
-                                    orders.GetCountBusySeetsByDateIdAndCategory(id, 0));
+                                    ordersDb.GetCountBusySeetsByDateIdAndCategory(id, 0));
 
             ViewBag.TotalCountParterreSeats = TheaterInformation.TotalCountParterreSeats;
             ViewBag.PriceParterreSeats = TheaterInformation.PriceParterre;
             ViewBag.FreeParterreSeats = (TheaterInformation.TotalCountParterreSeats -
-                                    orders.GetCountBusySeetsByDateIdAndCategory(id, 1));
+                                    ordersDb.GetCountBusySeetsByDateIdAndCategory(id, 1));
         }
 
         /// <summary>
@@ -170,10 +172,10 @@ namespace Theater.Controllers
         /// <param name="orders">databas, where saves orders</param>
         /// <param name="dateId">date id, when will be play</param>
         /// <returns>If order correct return true, else false</returns>
-        private bool isTrueOrder(Order order, IOrderDao orders, int dateId)
+        private bool isTrueOrder(Order order, int dateId)
         {
-            int count1 = TheaterInformation.TotalCountBalconySeats - orders.GetCountBusySeetsByDateIdAndCategory(dateId, 0);
-            int count2 = TheaterInformation.TotalCountParterreSeats - orders.GetCountBusySeetsByDateIdAndCategory(dateId, 1);
+            int count1 = TheaterInformation.TotalCountBalconySeats - ordersDb.GetCountBusySeetsByDateIdAndCategory(dateId, 0);
+            int count2 = TheaterInformation.TotalCountParterreSeats - ordersDb.GetCountBusySeetsByDateIdAndCategory(dateId, 1);
 
             return (((order.Category == Category.Balcony && order.Quantity < count1) ||
                     (order.Category == Category.Parterre && order.Quantity < count2))

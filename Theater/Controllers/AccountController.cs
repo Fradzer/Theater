@@ -17,6 +17,20 @@ namespace Theater.Controllers
     [Culture]
     public class AccountController : Controller
     {
+        private static ILoginDao loginsDb;
+        private static IDateDao datesDb;
+        private static IOrderDao ordersDb;
+        private static IPlayDao playsDb;
+
+        public AccountController()
+        {
+            loginsDb = LoginsTableConnection.Instance;
+            datesDb = DatesTableConnection.Instance;
+            ordersDb = OrdersTableConnection.Instance;
+            playsDb = PlaysTableConnection.Instance;
+        }
+
+
         // GET: Account
         public ActionResult Index()
         {
@@ -38,8 +52,7 @@ namespace Theater.Controllers
         {
             if (isTrueUser(user, confirmPassword))
             {
-                ILoginDao logins = LoginsTableConnection.Instance;
-                logins.AddAccount(user);
+                loginsDb.AddAccount(user);
 
                 CreateAuthCookie(user);
 
@@ -64,8 +77,7 @@ namespace Theater.Controllers
         [NoAuthorize]
         public ActionResult Login(string email, string password)
         {
-            ILoginDao logins = LoginsTableConnection.Instance;
-            User user = logins.GetUserByEmailAndPassword(email, password);
+            User user = loginsDb.GetUserByEmailAndPassword(email, password);
             if (user == null)
             {
                 ModelState.AddModelError("Incorrectrly entered", Resources.Resource.ErrorLoginInput);
@@ -91,14 +103,11 @@ namespace Theater.Controllers
         [Authorize]
         public ActionResult Cart()
         {
-            IDateDao datesDb = DatesTableConnection.Instance;
             ViewBag.Dates = datesDb.GetAllDates();
 
-            IOrderDao ordersDb = OrdersTableConnection.Instance;
             List<Order> orders = ordersDb.GetOrdersByIdLogin(CurrentUserService.GetCurrentUser().Id)
                 .OrderBy( x=> datesDb.GetDateById(x.DateId).Date).ToList();
 
-            IPlayDao playsDb = PlaysTableConnection.Instance;
             ViewBag.Plays = playsDb.GetAllPlays();
 
 
