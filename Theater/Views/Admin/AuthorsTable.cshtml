@@ -1,0 +1,110 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Theater.Models.Plays;
+@using System.Collections;
+@model IPagedList<Author>
+@{
+    ViewBag.Title = "AuthorsTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Hashtable idAndCount = ViewBag.idAndCountInPlay;
+}
+
+@Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="row">
+
+    <div class="col-lg-6">
+        @using (Html.BeginForm("CreateAuthor", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+            <form class="form-horizontal">
+                <fieldset>
+
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label for="Name" class="col-lg-2 control-label">@Resources.Resource.NameField</label>
+                        <div class="col-lg-5">
+                            <input name="Name" type="text" class="form-control" id="inputName" placeholder=@Resources.Resource.NameField>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">@Resources.Resource.Create</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        }
+    </div>
+    <div class="col-lg-6 hide" id="update-form">
+        @using (Html.BeginForm("AuthorUpdate", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+            <form class="form-horizontal">
+                <fieldset>
+
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label for="Id" class="col-lg-2 control-label">@Resources.Resource.Id</label>
+                        <div class="col-lg-5">
+                            <input name="Id" type="number" class="form-control" id="id-update" placeholder="@Resources.Resource.Id"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Name" class="col-lg-2 control-label">@Resources.Resource.NameField</label>
+                        <div class="col-lg-5">
+                            <input name="Name" type="text" class="form-control" id="name-update" placeholder=@Resources.Resource.NameField>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">@Resources.Resource.Update</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        }
+    </div>
+</div>
+
+
+    <table class="table table-striped table-hover sortable">
+        <thead>
+            <tr>
+                <th>@Resources.Resource.Id</th>
+                <th>@Resources.Resource.Author</th>
+                <th>@Resources.Resource.CountRef</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in Model)
+            {
+                    <tr id="author__@author.Id">
+                        <td class="id" id="id__@author.Id">@author.Id</td>
+                        <td class="name" id="name__@author.Id">@author.Name</td>
+                        <td class="count-ref" id="count-ref__@author.Id">@idAndCount[author.Id]</td>
+                        <td class="buttons-action">
+                            <div class="btn-group">
+
+                                @using (Html.BeginForm("AuthorDelete", "Admin", new { id = author.Id }, FormMethod.Post, new { @class = "form-delete" }))
+                                {
+                                    <button type="submit" class="btn btn-default">@Resources.Resource.Delete</button>
+                                }
+
+                                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="update-author" onclick="FillUpdateForm(@author.Id)">@Resources.Resource.Update</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+            }            
+        </tbody>
+    </table>
+
+    @Resources.Resource.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Resources.Resource.of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("AuthorsTable", "Admin", new { page }))

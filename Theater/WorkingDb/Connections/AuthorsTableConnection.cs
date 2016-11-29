@@ -20,6 +20,16 @@ namespace Theater.WorkingDb.Connections
                                          FROM authors
                                          WHERE Id=@Id";
 
+        private string deleteAuthorById = @"DELETE FROM authors
+                                         WHERE Id=@Id";
+
+        private string updateAuthorById = @"UPDATE authors
+                                         SET name=@name
+                                         WHERE Id=@Id";
+
+        private string createAuthor = @"INSERT authors(name)
+                                         VALUES(@name)";
+
         private static AuthorsTableConnection instance;
         public static AuthorsTableConnection Instance
         {
@@ -74,6 +84,45 @@ namespace Theater.WorkingDb.Connections
                 }
             }
             return null;
+        }
+
+        public void DeleteById(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(deleteAuthorById, connection);
+
+                command.Parameters.AddWithValue("@Id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Update(Author author)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(updateAuthorById, connection);
+
+                command.Parameters.AddWithValue("@Id", author.Id);
+                command.Parameters.AddWithValue("@name", author.Name);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Create(Author author)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionStr))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(createAuthor, connection);
+
+                command.Parameters.AddWithValue("@name", author.Name);
+                command.ExecuteNonQuery();                
+            }
         }
     }
 }
