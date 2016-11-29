@@ -21,7 +21,8 @@ namespace Theater.WorkingDb.Interfaces
         /// <param name="id">genre id</param>
         /// <returns>return genre by id</returns>
         Genre GetGenreById(int id);
-
-
+        void DeleteById(int id);
+        void Create(Genre genre);
+        void Update(Genre genre);
     }
 }

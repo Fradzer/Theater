@@ -270,4 +270,52 @@
   <data name="User" xml:space="preserve">
     <value>User</value>
   </data>
+  <data name="Authors" xml:space="preserve">
+    <value>Authors</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Dates</value>
+  </data>
+  <data name="Genres" xml:space="preserve">
+    <value>Genres</value>
+  </data>
+  <data name="Plays" xml:space="preserve">
+    <value>Plays</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>from</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="CountRef" xml:space="preserve">
+    <value>Number references</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error!</value>
+  </data>
+  <data name="ErrorFound" xml:space="preserve">
+    <value>Record not found!</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed!</value>
+  </data>
+  <data name="NameField" xml:space="preserve">
+    <value>Name</value>
+  </data>
 </root>

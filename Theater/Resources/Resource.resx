@@ -270,4 +270,52 @@
   <data name="User" xml:space="preserve">
     <value>Пользователь</value>
   </data>
+  <data name="Authors" xml:space="preserve">
+    <value>Авторы</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Даты</value>
+  </data>
+  <data name="Genres" xml:space="preserve">
+    <value>Жанры</value>
+  </data>
+  <data name="Plays" xml:space="preserve">
+    <value>Пьессы</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>из</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Страница</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="CountRef" xml:space="preserve">
+    <value>Количество ссылок</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка!</value>
+  </data>
+  <data name="ErrorFound" xml:space="preserve">
+    <value>Запись не найдена!</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Выполнено!</value>
+  </data>
+  <data name="NameField" xml:space="preserve">
+    <value>Название</value>
+  </data>
 </root>

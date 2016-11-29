@@ -30,15 +30,15 @@ CREATE TABLE dbo.plays (
     authorId    INT            NOT NULL,
     genreId     INT            NOT NULL,
     description NVARCHAR (MAX) NULL,
-    CONSTRAINT [FK_plays_authors] FOREIGN KEY ([authorId]) REFERENCES [dbo].[authors] ([Id]),
-    CONSTRAINT [FK_plays_genres] FOREIGN KEY ([genreId]) REFERENCES [dbo].[genres] ([Id])
+    CONSTRAINT [FK_plays_authors] FOREIGN KEY ([authorId]) REFERENCES [dbo].[authors] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_plays_genres] FOREIGN KEY ([genreId]) REFERENCES [dbo].[genres] ([Id]) ON DELETE CASCADE
 );
 
 CREATE TABLE dbo.dates (
     Id      INT  IDENTITY (1, 1) NOT NULL PRIMARY KEY,
     playsId INT  NOT NULL,
     date    DATE NOT NULL,
-	CONSTRAINT [FK_dates_plays] FOREIGN KEY ([playsId]) REFERENCES [dbo].[plays] ([Id])
+	CONSTRAINT [FK_dates_plays] FOREIGN KEY ([playsId]) REFERENCES [dbo].[plays] ([Id]) ON DELETE CASCADE
 
 );
 
@@ -50,15 +50,15 @@ CREATE TABLE dbo.orders (
     quantity      INT   NOT NULL,
     price         MONEY NOT NULL,
     statusOrderId INT   NOT NULL,
-    CONSTRAINT [FK_orders_dates] FOREIGN KEY ([dateId]) REFERENCES [dbo].[dates] ([Id]),
-    CONSTRAINT [FK_orders_logins] FOREIGN KEY ([loginId]) REFERENCES [dbo].[logins] ([Id])
+    CONSTRAINT [FK_orders_dates] FOREIGN KEY ([dateId]) REFERENCES [dbo].[dates] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_orders_logins] FOREIGN KEY ([loginId]) REFERENCES [dbo].[logins] ([Id]) ON DELETE CASCADE
 
 );
 
 Declare @i int = 0, @j int = 0, @NameLimit int, @Position int
 DECLARE @Symbol CHAR(52)= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-DECLARE @CountForSmallTable INT = 10
-DECLARE @CountForBigTable INT = 15
+DECLARE @CountForSmallTable INT = 50
+DECLARE @CountForBigTable INT = 100
 DECLARE @CountAuthors INT = 0
 DECLARE @CountGenres INT = 0
 DECLARE @Countlogins INT = 0
