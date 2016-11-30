@@ -24,7 +24,6 @@ namespace Theater.WorkingDb.Interfaces
         void DeleteById(int id);
         void Update(Author author);
         void Create(Author author);
-
-
+        List<Author> GetAuthorsByName(string name);
     }
 }

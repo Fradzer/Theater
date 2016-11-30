@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,6 +22,9 @@ namespace Theater.Controllers
         private static IDateDao datesDb;
         private static IOrderDao ordersDb;
         private static IPlayDao playsDb;
+        private static int pageSize = 10;
+        private static int normalyPageSize = 10;
+        private static int pageSizeForFilter = 1000;
 
         public AccountController()
         {
@@ -101,17 +105,27 @@ namespace Theater.Controllers
         // GET: /Account/Cart
         [HttpGet]
         [Authorize]
-        public ActionResult Cart()
+        public ActionResult Cart(int page = 1)
         {
             ViewBag.Dates = datesDb.GetAllDates();
 
-            List<Order> orders = ordersDb.GetOrdersByIdLogin(CurrentUserService.GetCurrentUser().Id)
+            List<Order> filterOrder = (TempData["OrderList"] as List<Order>);
+
+            List<Order> orders = filterOrder ?? ordersDb.GetOrdersByIdLogin(CurrentUserService.GetCurrentUser().Id)
                 .OrderBy( x=> datesDb.GetDateById(x.DateId).Date).ToList();
 
             ViewBag.Plays = playsDb.GetAllPlays();
 
+            int sizeForPage = pageSize;
+            pageSize = normalyPageSize;
 
-            return View(orders);
+            page = truePage(page, (int)Math.Ceiling((double)orders.Count / sizeForPage));
+
+            ViewBag.Plays = playsDb.GetAllPlays();
+
+            ViewBag.Logins = loginsDb.GetAllLogins();
+
+            return View(orders.ToPagedList(page, sizeForPage));
         }
 
         /// <summary>
@@ -131,6 +145,24 @@ namespace Theater.Controllers
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
             cookie.Expires = timeoutCookie;
             Response.Cookies.Add(cookie);
+        }
+
+        [HttpPost]
+        public ActionResult GetOrders(int? countTickets)
+        {
+            try
+            {
+                if (countTickets != null)
+                {
+                    TempData["orderList"] = ordersDb.GetOrderByCountTicketsAndUserId((int)countTickets, CurrentUserService.GetCurrentUser().Id);
+                    pageSize = pageSizeForFilter;
+                }
+                return RedirectToAction("Cart", "Account");
+            }
+            catch
+            {
+                return RedirectToAction("Cart", "Account");
+            }
         }
 
         /// <summary>
@@ -176,6 +208,18 @@ namespace Theater.Controllers
             }
 
             return trueUser;
+        }
+        private int truePage(int page, int pageCount)
+        {
+            if (page > pageCount)
+            {
+                page = pageCount;
+            }
+            if (page < 1)
+            {
+                page = 1;
+            }
+            return page;
         }
     }
 }

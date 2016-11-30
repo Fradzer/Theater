@@ -124,5 +124,12 @@ namespace Theater.WorkingDb.Connections
                 command.ExecuteNonQuery();                
             }
         }
+
+        public List<Author> GetAuthorsByName(string name)
+        {
+            List<Author> authors = GetAllAuthors().Where(author => author.Name.Contains(name))
+                        .OrderBy(author => author.Name.IndexOf(name)).ToList();
+            return authors;
+        }
     }
 }

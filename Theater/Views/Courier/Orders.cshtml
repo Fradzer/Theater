@@ -1,12 +1,13 @@
 ﻿@using Theater.Models.Account
 @using Theater.Models.Plays
-
-@model List<Order>
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<Order>
 @{
     List<DatePlay> dates = ViewBag.Dates;
     List<Play> plays = ViewBag.Plays;
     List<User> logins = ViewBag.Logins;
-
+    Session["OrderList"] = Model.ToList();
     DateTime datePlay = new DateTime();
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -95,5 +96,31 @@
     {
         <h3>@Resources.Resource.NoOrders</h3>
     }
+
+    <div class="row">
+        <div class="col-lg-5">
+            @using (Html.BeginForm("GetOrders", "Courier", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">@Resources.Resource.Tickets</span>
+                                <input name="countTickets" type="number" class="form-control">
+
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
+                                    <a href="/Courier/Orders" class="btn btn-primary">@Resources.Resource.Cancel</a>
+
+                                </span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            }
+        </div>
+    </div>
+    @Resources.Resource.Page @(Model.PageCount < Model.PageNumber ? Model.PageCount : 1) @Resources.Resource.of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Orders", "Courier", new { page }))
 </body>
 </html>

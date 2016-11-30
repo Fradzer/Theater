@@ -125,6 +125,8 @@ C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\The
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\en\Theater.resources.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\PagedList.dll
+C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\PagedList.Mvc.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Helpers.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Mvc.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Razor.dll
@@ -132,13 +134,14 @@ C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\Sys
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Webpages.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Webpages.Razor.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\PagedList.xml
+C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\PagedList.Mvc.xml
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Razor.xml
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Webpages.xml
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Webpages.Deployment.xml
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Webpages.Razor.xml
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Helpers.xml
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\bin\System.Web.Mvc.xml
-C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.csprojResolveAssemblyReference.cache
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.Resources.Resource.resources
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.Resources.Resource.en.resources
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.csproj.GenerateResource.Cache

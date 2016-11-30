@@ -160,5 +160,11 @@ namespace Theater.WorkingDb.Connections
                 command.ExecuteNonQuery();
             }
         }
+
+        public DatePlay GetDate(DateTime newDate)
+        {
+            DatePlay filterDate = GetAllDates().First(date => date.Date.Date == newDate.Date);
+            return filterDate;
+        }
     }
 }

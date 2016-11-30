@@ -21,6 +21,13 @@ namespace Theater.Controllers
         private static IPlayDao playsDb;
         private static IDateDao datesDb;
         private static int pageSize = 10;
+        private static int normalyPageSize = 10;
+        private static int pageSizeForFilter = 1000;
+
+        private static string messagesAuthorTable;
+        private static string messagesGenreTable;
+        private static string messagesPlayTable;
+        private static string messagesDatePlayTable;
 
         public AdminController()
         {
@@ -38,11 +45,19 @@ namespace Theater.Controllers
         #region AuthorsCrud
         public ActionResult AuthorsTable(int page = 1)
         {
-            List<Author> authors = authorsDb.GetAllAuthors();
+            ModelState.AddModelError("messages", messagesAuthorTable);
+            messagesAuthorTable = null;
+
+            List<Author> filterAuthors = TempData["AuthorList"] as List<Author>;
+
+            List<Author> authors = filterAuthors ?? authorsDb.GetAllAuthors();
             List<Play> plays = playsDb.GetAllPlays();
             Hashtable idAndCountInPlays = new Hashtable();
             authors.ForEach(author => idAndCountInPlays.Add(author.Id, plays.Where(play => play.AuthorId == author.Id).Count()));
             ViewBag.idAndCountInPlay = idAndCountInPlays;
+
+            int sizeForPage = pageSize;
+            pageSize = normalyPageSize;
 
             page = truePage(page, (int)Math.Ceiling((double)authors.Count / pageSize));
 
@@ -57,19 +72,19 @@ namespace Theater.Controllers
             {
                 if (authorsDb.GetAuthorById(id) != null)
                 {
-                    authorsDb.DeleteById(id);
-                    ModelState.AddModelError("Completed", Resources.Resource.Completed);
 
+                    authorsDb.DeleteById(id);
+                    messagesAuthorTable = Resources.Resource.MessageDeleted;
                 }
                 else
                 {
-                    ModelState.AddModelError("Not found author", Resources.Resource.ErrorFound);
+                    messagesAuthorTable = Resources.Resource.ErrorFound;
                 }
                 return RedirectToAction("AuthorsTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Delete", Resources.Resource.Error);
+                messagesAuthorTable = Resources.Resource.Error;
                 return RedirectToAction("AuthorsTable", "Admin");
             }
         }
@@ -80,11 +95,12 @@ namespace Theater.Controllers
             try
             {
                 authorsDb.Create(author);
+                messagesAuthorTable = Resources.Resource.MessageCreated;
                 return RedirectToAction("AuthorsTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                messagesAuthorTable = Resources.Resource.Error;
                 return RedirectToAction("AuthorsTable", "Admin");
             }
         }
@@ -95,11 +111,27 @@ namespace Theater.Controllers
             try
             {
                 authorsDb.Update(author);
+                messagesAuthorTable = Resources.Resource.MessageUpdated;
                 return RedirectToAction("AuthorsTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Update", Resources.Resource.Error);
+                messagesAuthorTable= Resources.Resource.Error;
+                return RedirectToAction("AuthorsTable", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetAuthorsByName(string name)
+        {
+            try
+            {
+                TempData["AuthorList"] = authorsDb.GetAuthorsByName(name);
+                pageSize = pageSizeForFilter;
+                return RedirectToAction("AuthorsTable", "Admin");
+            }
+            catch
+            {
                 return RedirectToAction("AuthorsTable", "Admin");
             }
         }
@@ -107,12 +139,21 @@ namespace Theater.Controllers
 
         #region GenresCrud
         public ActionResult GenresTable(int page = 1)
-        {            
-            List<Genre> genres = genresDb.GetAllGenres();
+        {
+            ModelState.AddModelError("messages", messagesGenreTable);
+            messagesGenreTable = null;
+
+            List<Genre> filterGenres = TempData["GenreList"] as List<Genre>;
+
+            List<Genre> genres = filterGenres ?? genresDb.GetAllGenres();
+
             List<Play> plays = playsDb.GetAllPlays();
             Hashtable idAndCountInPlays = new Hashtable();
             genres.ForEach(genre => idAndCountInPlays.Add(genre.Id, plays.Where(play => play.GenreId == genre.Id).Count()));
             ViewBag.idAndCountInPlay = idAndCountInPlays;
+
+            int sizeForPage = pageSize;
+            pageSize = normalyPageSize;
 
             page = truePage(page, (int)Math.Ceiling((double)genres.Count / pageSize));
             
@@ -127,18 +168,18 @@ namespace Theater.Controllers
                 if (genresDb.GetGenreById(id) != null)
                 {
                     genresDb.DeleteById(id);
-                    ModelState.AddModelError("Completed", Resources.Resource.Completed);
+                    messagesGenreTable = Resources.Resource.MessageDeleted;
 
                 }
                 else
                 {
-                    ModelState.AddModelError("Not found genre", Resources.Resource.ErrorFound);
+                    messagesGenreTable = Resources.Resource.ErrorFound;
                 }
                 return RedirectToAction("GenresTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Delete", Resources.Resource.Error);
+                messagesGenreTable = Resources.Resource.Error;
                 return RedirectToAction("GenresTable", "Admin");
             }
         }
@@ -149,11 +190,12 @@ namespace Theater.Controllers
             try
             {
                 genresDb.Create(genre);
+                messagesGenreTable = Resources.Resource.MessageCreated;
                 return RedirectToAction("GenresTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                messagesGenreTable = Resources.Resource.Error;
                 return RedirectToAction("GenresTable", "Admin");
             }
         }
@@ -163,11 +205,27 @@ namespace Theater.Controllers
             try
             {
                 genresDb.Update(genre);
+                messagesGenreTable = Resources.Resource.MessageUpdated;
                 return RedirectToAction("GenresTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Update", Resources.Resource.Error);
+                messagesGenreTable = Resources.Resource.Error;
+                return RedirectToAction("GenresTable", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetGenresByName(string name)
+        {
+            try
+            {
+                TempData["GenreList"] = genresDb.GetGenresByName(name);
+                pageSize = pageSizeForFilter;
+                return RedirectToAction("GenresTable", "Admin");
+            }
+            catch
+            {
                 return RedirectToAction("GenresTable", "Admin");
             }
         }
@@ -176,10 +234,18 @@ namespace Theater.Controllers
         #region PlaysCrud
         public ActionResult PlaysTable(int page = 1)
         {
-            List<Play> plays = playsDb.GetAllPlays();
+            ModelState.AddModelError("messages", messagesPlayTable);
+            messagesPlayTable = null;
+
+            List<Play> filterPlays = TempData["PlayList"] as List<Play>;
+
+            List<Play> plays = filterPlays ?? playsDb.GetAllPlays();
             Hashtable idAndCountInPlays = new Hashtable();
             plays.ForEach(play => idAndCountInPlays.Add(play.Id, datesDb.GetDatesByIdPlay(play.Id).Count()));
             ViewBag.idAndCountInPlay = idAndCountInPlays;
+
+            int sizeForPage = pageSize;
+            pageSize = normalyPageSize;
 
             page = truePage(page, (int)Math.Ceiling((double)plays.Count / pageSize));
 
@@ -196,18 +262,18 @@ namespace Theater.Controllers
                 if (playsDb.GetPlayById(id) != null)
                 {
                     playsDb.DeleteById(id);
-                    ModelState.AddModelError("Completed", Resources.Resource.Completed);
+                    messagesPlayTable = Resources.Resource.MessageDeleted;
 
                 }
                 else
                 {
-                    ModelState.AddModelError("Not found play", Resources.Resource.ErrorFound);
+                    messagesPlayTable = Resources.Resource.ErrorFound;
                 }
                 return RedirectToAction("PlaysTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Delete", Resources.Resource.Error);
+                messagesPlayTable = Resources.Resource.Error;
                 return RedirectToAction("PlaysTable", "Admin");
             }
         }
@@ -218,11 +284,12 @@ namespace Theater.Controllers
             try
             {
                 playsDb.Create(play);
+                messagesPlayTable = Resources.Resource.MessageCreated;
                 return RedirectToAction("PlaysTable", "Admin");
             }
             catch(Exception ex)
             {
-                ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                messagesPlayTable = Resources.Resource.Error;
                 return RedirectToAction("PlaysTable", "Admin");
             }
         }
@@ -232,11 +299,29 @@ namespace Theater.Controllers
             try
             {
                 playsDb.Update(play);
+                messagesPlayTable = Resources.Resource.MessageUpdated;
+
                 return RedirectToAction("PlaysTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Update", Resources.Resource.Error);
+                messagesPlayTable = Resources.Resource.Error;
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetPlaysByName(string name)
+        {
+            try
+            {
+                TempData["PlayList"] = playsDb.GetPlaysByName(name);
+                pageSize = pageSizeForFilter;
+
+                return RedirectToAction("PlaysTable", "Admin");
+            }
+            catch
+            {
                 return RedirectToAction("PlaysTable", "Admin");
             }
         }
@@ -245,14 +330,20 @@ namespace Theater.Controllers
         #region DatePlaysCrud
         public ActionResult DatePlaysTable(int page = 1)
         {
-            List<DatePlay> dates = datesDb.GetAllDates();            
+            ModelState.AddModelError("messages", messagesDatePlayTable);
+            messagesDatePlayTable = null;
+
+            DatePlay filterDate = TempData["Date"] as DatePlay;
+
+            List<DatePlay> dates = filterDate == null ? datesDb.GetAllDates() : new List<DatePlay> { filterDate };
+
+            int sizeForPage = pageSize;
+            pageSize = normalyPageSize;
 
             page = truePage(page, (int)Math.Ceiling((double)dates.Count / pageSize));
 
             return View(dates.ToPagedList(page, pageSize));
         }
-
-
 
         [HttpPost]
         public ActionResult DatePlayDelete(int id)
@@ -262,24 +353,24 @@ namespace Theater.Controllers
                 if (datesDb.GetDateById(id) != null)
                 {
                     datesDb.DeleteById(id);
-                    ModelState.AddModelError("Completed", Resources.Resource.Completed);
+                    messagesDatePlayTable = Resources.Resource.MessageDeleted;
 
                 }
                 else
                 {
-                    ModelState.AddModelError("Not found date", Resources.Resource.ErrorFound);
+                    messagesDatePlayTable = Resources.Resource.ErrorFound;
                 }
                 return RedirectToAction("DatePlaysTable", "Admin");
             }
             catch
             {
-                ModelState.AddModelError("Error Delete", Resources.Resource.Error);
+                messagesDatePlayTable = Resources.Resource.Error;
                 return RedirectToAction("DatePlaysTable", "Admin");
             }
         }
 
         [HttpPost]
-        public ActionResult CreateDatePlay(DatePlay date, string dateCheck)
+        public ActionResult DatePlayCreate(DatePlay date, string dateCheck)
         {
             try
             {
@@ -289,17 +380,18 @@ namespace Theater.Controllers
                 {
                     date.Date = newDate;
                     datesDb.Create(date);
+                    messagesDatePlayTable = Resources.Resource.MessageCreated;
                     return RedirectToAction("DatePlaysTable", "Admin");
                 }
                 else
                 {
-                    ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                    messagesDatePlayTable = Resources.Resource.Error;
                     return RedirectToAction("DatePlaysTable", "Admin");
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                messagesDatePlayTable = Resources.Resource.Error;
                 return RedirectToAction("DatePlaysTable", "Admin");
             }
         }
@@ -314,32 +406,55 @@ namespace Theater.Controllers
                 {
                     date.Date = newDate;
                     datesDb.Update(date);
+                    messagesDatePlayTable = Resources.Resource.MessageUpdated;
                     return RedirectToAction("DatePlaysTable", "Admin");
                 }
                 else
                 {
-                    ModelState.AddModelError("Error Create", Resources.Resource.Error);
+                    messagesDatePlayTable = Resources.Resource.Error;
                     return RedirectToAction("DatePlaysTable", "Admin");
                 }
             }
             catch(Exception e)
             {
-                ModelState.AddModelError("Error Update", Resources.Resource.Error);
+                messagesDatePlayTable = Resources.Resource.Error;
+                return RedirectToAction("DatePlaysTable", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetDate(string dateCheck)
+        {
+            try
+            {
+                DateTime newDate;
+                if (DateTime.TryParse(dateCheck, out newDate))
+                {
+                    TempData["Date"] = datesDb.GetDate(newDate);
+                    pageSize = pageSizeForFilter;
+                }
+                else
+                {
+                    TempData["Date"] = null;
+                }
+                return RedirectToAction("DatePlaysTable", "Admin");
+            }
+            catch
+            {
                 return RedirectToAction("DatePlaysTable", "Admin");
             }
         }
         #endregion
 
-
         private int truePage(int page, int pageCount)
         {
+            if (page > pageCount)
+            {
+                page = pageCount;
+            }
             if (page < 1)
             {
                 page = 1;
-            }
-            else if (page > pageCount)
-            {
-                page = pageCount;
             }
             return page;
         }

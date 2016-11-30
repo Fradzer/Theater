@@ -21,9 +21,6 @@
             {
             <form class="form-horizontal">
                 <fieldset>
-
-                    @Html.ValidationSummary("", new { @class = "text-danger" })
-
                     <div class="form-group">
                         <label for="Name" class="col-lg-2 control-label">@Resources.Resource.NameField</label>
                         <div class="col-lg-5">
@@ -46,9 +43,6 @@
             {
             <form class="form-horizontal">
                 <fieldset>
-
-                    @Html.ValidationSummary("", new { @class = "text-danger" })
-
                     <div class="form-group">
                         <label for="Id" class="col-lg-2 control-label">@Resources.Resource.Id</label>
                         <div class="col-lg-5">
@@ -109,6 +103,27 @@
         }
     </tbody>
 </table>
+<div class="row">
+    <div class="col-lg-5">
+        @using (Html.BeginForm("GetGenresByName", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Resources.Resource.NameField</span>
+                            <input name="name" type="text" class="form-control">
 
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
+                                <a href="/Admin/GenresTable" class="btn btn-primary">@Resources.Resource.Cancel</a>
+                            </span>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        }
+    </div>
+</div>
 @Resources.Resource.Page @(Model.PageCount < Model.PageNumber ? Model.PageCount : 1) @Resources.Resource.of @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("GenresTable", "Admin", new { page }))

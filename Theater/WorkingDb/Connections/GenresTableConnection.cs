@@ -128,5 +128,12 @@ namespace Theater.WorkingDb.Connections
                 command.ExecuteNonQuery();
             }
         }
+
+        public List<Genre> GetGenresByName(string name)
+        {
+            List<Genre> genres = GetAllGenres().Where(genre => genre.Name.Contains(name))
+                        .OrderBy(genre => genre.Name.IndexOf(name)).ToList();
+            return genres;
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace Theater.Controllers
             List<DatePlay> sortedDates = datesDb.GetAllDates().OrderBy(x => x.Date).ToList();
             ViewBag.Dates = sortedDates;
 
-            var sortedPlays = playsDb.GetAllPlays().OrderBy(a => a.Id).ToList()
+            var sortedPlays = playsDb.GetAllPlays().OrderBy(a => a.Name).ToList()
                             .Where(play => sortedDates.Where(date=> date.PlayId == play.Id).Count() > 0);
 
             ViewBag.Plays = sortedPlays.ToPagedList(page, pageSize);

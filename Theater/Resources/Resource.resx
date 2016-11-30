@@ -318,4 +318,19 @@
   <data name="NameField" xml:space="preserve">
     <value>Название</value>
   </data>
+  <data name="InfoDatePlay" xml:space="preserve">
+    <value>В один день может проходить только одна пьеса(не сохранится,если будет иначе)!</value>
+  </data>
+  <data name="MessageCreated" xml:space="preserve">
+    <value>Создано!</value>
+  </data>
+  <data name="MessageDeleted" xml:space="preserve">
+    <value>Удалено!</value>
+  </data>
+  <data name="MessageUpdated" xml:space="preserve">
+    <value>Обновлено!</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Найти</value>
+  </data>
 </root>

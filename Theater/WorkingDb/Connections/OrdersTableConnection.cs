@@ -200,6 +200,24 @@ namespace Theater.WorkingDb.Connections
                 command.ExecuteNonQuery();
             }
         }
+
+        public List<Order> GetOrderByCountTicketsAndUserId(int countTickets)
+        {
+            List<Order> orders = GetAllOrders().Where(order => order.Quantity == countTickets).ToList();
+            return orders;
+        }
+
+        public List<Order> GetOrderByCountTicketsAndUserId(int countTickets, int userId)
+        {
+            List<Order> orders = GetOrdersByIdLogin(userId).Where(order => order.Quantity == countTickets).ToList();
+            return orders;
+        }
+
+        public List<Order> GetOrderByCountTickets(int countTickets)
+        {
+            List<Order> orders = GetAllOrders().Where(order => order.Quantity == countTickets).ToList();
+            return orders;
+        }
     }
 
 }

@@ -142,5 +142,12 @@ namespace Theater.WorkingDb.Connections
                 command.ExecuteNonQuery();
             }
         }
+
+        public List<Play> GetPlaysByName(string name)
+        {
+            List<Play> plays = GetAllPlays().Where(play => play.Name.Contains(name))
+                            .OrderBy(play => play.Name.IndexOf(name)).ToList();
+            return plays;
+        }
     }
 }

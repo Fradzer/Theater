@@ -318,4 +318,19 @@
   <data name="NameField" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="InfoDatePlay" xml:space="preserve">
+    <value>In one day can take only one play (not persist if it is anyway)!</value>
+  </data>
+  <data name="MessageCreated" xml:space="preserve">
+    <value>Created!</value>
+  </data>
+  <data name="MessageDeleted" xml:space="preserve">
+    <value>Deleted!</value>
+  </data>
+  <data name="MessageUpdated" xml:space="preserve">
+    <value>Updated!</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

@@ -24,5 +24,6 @@ namespace Theater.WorkingDb.Interfaces
         void DeleteById(int id);
         void Create(Genre genre);
         void Update(Genre genre);
+        List<Genre> GetGenresByName(string name);
     }
 }

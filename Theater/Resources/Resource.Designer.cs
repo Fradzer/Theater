@@ -412,6 +412,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to В один день может проходить только одна пьеса(не сохранится,если будет иначе)!.
+        /// </summary>
+        public static string InfoDatePlay {
+            get {
+                return ResourceManager.GetString("InfoDatePlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Войти.
         /// </summary>
         public static string Login {
@@ -435,6 +444,33 @@ namespace Resources {
         public static string Logout {
             get {
                 return ResourceManager.GetString("Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Создано!.
+        /// </summary>
+        public static string MessageCreated {
+            get {
+                return ResourceManager.GetString("MessageCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удалено!.
+        /// </summary>
+        public static string MessageDeleted {
+            get {
+                return ResourceManager.GetString("MessageDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Обновлено!.
+        /// </summary>
+        public static string MessageUpdated {
+            get {
+                return ResourceManager.GetString("MessageUpdated", resourceCulture);
             }
         }
         
@@ -606,6 +642,15 @@ namespace Resources {
         public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Найти.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

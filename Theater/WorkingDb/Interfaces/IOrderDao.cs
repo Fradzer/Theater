@@ -49,11 +49,13 @@ namespace Theater.WorkingDb.Interfaces
         /// <param name="id">order id</param>
         /// <param name="newStatus">new status for order</param>
         void UpdateOrderStatusById(int id, int newStatus);
+        List<Order> GetOrderByCountTicketsAndUserId(int countTickets, int userId);
 
         /// <summary>
         /// Delete order by id
         /// </summary>
         /// <param name="orderId">order id, which need delete</param>
         void DeleteOrderById(int orderId);
+        List<Order> GetOrderByCountTickets(int countTickets);
     }
 }

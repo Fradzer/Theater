@@ -8,6 +8,7 @@ using Theater.Models.Plays;
 using Theater.WorkingDb.Connections;
 using Theater.WorkingDb.Interfaces;
 using Theater.Models.Account;
+using PagedList;
 
 namespace Theater.Controllers
 {
@@ -19,6 +20,10 @@ namespace Theater.Controllers
         private static IDateDao datesDb;
         private static IOrderDao ordersDb;
         private static IPlayDao playsDb;
+        private static int pageSize = 10;
+        private static int normalyPageSize = 10;
+        private static int pageSizeForFilter = 1000;
+
 
         public CourierController()
         {
@@ -35,17 +40,43 @@ namespace Theater.Controllers
         }
 
         // GET: Courier/Orders
-        public ActionResult Orders()
+        public ActionResult Orders(int page = 1)
         {
             ViewBag.Dates = datesDb.GetAllDates();
 
-            List<Order> orders = ordersDb.GetAllOrders().OrderBy(x => datesDb.GetDateById(x.DateId).Date).ToList();            
+            List<Order> filterOrder = (TempData["OrderList"] as List<Order>);
+            List<Order> orders = (filterOrder ?? ordersDb.GetAllOrders()).Where(order => order.Status != StatusOrder.Completed)
+                                .OrderBy(x => datesDb.GetDateById(x.DateId).Date).ToList();
+
+            int sizeForPage = pageSize;
+            pageSize = normalyPageSize;
+
+            page = truePage(page, (int)Math.Ceiling((double)orders.Count / sizeForPage));
 
             ViewBag.Plays = playsDb.GetAllPlays();
 
             ViewBag.Logins = loginsDb.GetAllLogins();
 
-            return View(orders);
+            return View(orders.ToPagedList(page, sizeForPage));
+        }
+
+
+        [HttpPost]
+        public ActionResult GetOrders(int? countTickets)
+        {
+            try
+            {
+                if (countTickets != null)
+                {
+                    TempData["orderList"] = ordersDb.GetOrderByCountTickets((int)countTickets);
+                    pageSize = pageSizeForFilter;
+                }
+                return RedirectToAction("Orders", "Courier");
+            }
+            catch
+            {
+                return RedirectToAction("Orders", "Courier");
+            }
         }
 
         [HttpPost]
@@ -57,5 +88,19 @@ namespace Theater.Controllers
             }
             return RedirectToAction("Orders", "Courier");
         }
+
+        private int truePage(int page, int pageCount)
+        {
+            if (page > pageCount)
+            {
+                page = pageCount;
+            }
+            if (page < 1)
+            {
+                page = 1;
+            }
+            return page;
+        }
+
     }
 }
