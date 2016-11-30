@@ -57,7 +57,7 @@ CREATE TABLE dbo.orders (
 
 Declare @i int = 0, @j int = 0, @NameLimit int, @Position int
 DECLARE @Symbol CHAR(52)= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-DECLARE @CountForSmallTable INT = 50
+DECLARE @CountForSmallTable INT = 1000
 DECLARE @CountForBigTable INT = 100
 DECLARE @CountAuthors INT = 0
 DECLARE @CountGenres INT = 0
