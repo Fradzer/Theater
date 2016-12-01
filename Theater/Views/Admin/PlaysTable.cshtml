@@ -6,6 +6,9 @@
 @{
     ViewBag.Title = "PlaysTable";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<Author> authors = ViewBag.Authors;
+    List<Genre> genres = ViewBag.Genres;
     Hashtable idAndCount = ViewBag.idAndCountInPlay;
 }
 <title>Plays</title>
@@ -27,16 +30,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="AuthorId" class="col-lg-2 control-label">@Resources.Resource.Author Id</label>
+                        <label for="Author" class="col-lg-2 control-label">@Resources.Resource.Author</label>
                         <div class="col-lg-5">
-                            <input name="AuthorId" type="number" class="form-control" id="input-authorId" placeholder="@Resources.Resource.Author Id">
+                            <input name="authorName" type="text" class="form-control" id="input-author" placeholder="@Resources.Resource.Author">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="GenreId" class="col-lg-2 control-label">@Resources.Resource.Genre Id</label>
+                        <label for="Genre" class="col-lg-2 control-label">@Resources.Resource.Genre</label>
                         <div class="col-lg-5">
-                            <input name="GenreId" type="number" class="form-control" id="input-genreId" placeholder="@Resources.Resource.Genre Id">
+                            <input name="genreName" type="text" class="form-control" id="input-genre" placeholder="@Resources.Resource.Genre">
                         </div>
                     </div>
 
@@ -77,16 +80,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="AuthorId" class="col-lg-2 control-label">@Resources.Resource.Author Id</label>
+                        <label for="Author" class="col-lg-2 control-label">@Resources.Resource.Author</label>
                         <div class="col-lg-5">
-                            <input name="AuthorId" type="number" class="form-control" id="authorId-update" placeholder="@Resources.Resource.Author Id">
+                            <input name="authorName" type="text" class="form-control" id="author-update" placeholder="@Resources.Resource.Author">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="GenreId" class="col-lg-2 control-label">@Resources.Resource.Genre Id</label>
+                        <label for="Genre" class="col-lg-2 control-label">@Resources.Resource.Genre</label>
                         <div class="col-lg-5">
-                            <input name="GenreId" type="number" class="form-control" id="genreId-update" placeholder="@Resources.Resource.Genre Id">
+                            <input name="genreName" type="text" class="form-control" id="genre-update" placeholder="@Resources.Resource.Genre">
                         </div>
                     </div>
 
@@ -115,8 +118,8 @@
         <tr>
             <th>@Resources.Resource.Id</th>
             <th>@Resources.Resource.Play</th>
-            <th>@Resources.Resource.Author Id</th>
-            <th>@Resources.Resource.Genre Id</th>
+            <th>@Resources.Resource.Author</th>
+            <th>@Resources.Resource.Genre</th>
             <th>@Resources.Resource.Description</th>
             <th>@Resources.Resource.CountRef</th>
         </tr>
@@ -127,8 +130,8 @@
             <tr id="play__@play.Id">
                 <td class="id" id="id__@play.Id">@play.Id</td>
                 <td class="name" id="name__@play.Id">@play.Name</td>
-                <td class="authorId" id="authorId__@play.Id">@play.AuthorId</td>
-                <td class="genreId" id="genreId__@play.Id">@play.GenreId</td>
+                <td class="author" id="author__@play.Id">@authors.Find(author =>author.Id == play.AuthorId).Name</td>
+                <td class="genre" id="genre__@play.Id">@genres.Find(genre => genre.Id == play.GenreId).Name</td>
                 <td width="300px" height="100px" class="description" id="description__@play.Id">@play.Description</td>
                 <td class="count-ref" id="count-ref__@play.Id">@idAndCount[play.Id]</td>
                 <td class="buttons-action">

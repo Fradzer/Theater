@@ -32,6 +32,6 @@ namespace Theater.WorkingDb.Interfaces
         void DeleteById(int id);
         void Create(DatePlay date);
         void Update(DatePlay date);
-        DatePlay GetDate(DateTime newDate);
+        List<DatePlay> GetDatesByPlayIds(List<int> ids);
     }
 }

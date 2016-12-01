@@ -5,6 +5,8 @@
 @model IPagedList<DatePlay>
 @{
     ViewBag.Title = "DatePlaysTable";
+
+    List<Play> plays = ViewBag.Plays;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <title>DatePlays</title>
@@ -21,9 +23,9 @@
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
-                        <label for="PlayId" class="col-lg-2 control-label">@Resources.Resource.Play Id</label>
+                        <label for="Play" class="col-lg-2 control-label">@Resources.Resource.Play</label>
                         <div class="col-lg-5">
-                            <input name="PlayId" type="number" class="form-control" id="input-playId" placeholder="@Resources.Resource.Play Id">
+                            <input name="playName" type="text" class="form-control" id="input-play" placeholder="@Resources.Resource.Play">
                         </div>
                     </div>
 
@@ -58,9 +60,9 @@
 
 
                     <div class="form-group">
-                        <label for="PlayId" class="col-lg-2 control-label">@Resources.Resource.Play Id</label>
+                        <label for="Play" class="col-lg-2 control-label">@Resources.Resource.Play</label>
                         <div class="col-lg-5">
-                            <input name="PlayId" type="number" class="form-control" id="playId-update" placeholder="@Resources.Resource.Play Id">
+                            <input name="playName" type="text" class="form-control" id="play-update" placeholder="@Resources.Resource.Play">
                         </div>
                     </div>
 
@@ -88,7 +90,7 @@
     <thead>
         <tr>
             <th>@Resources.Resource.Id</th>
-            <th>@Resources.Resource.Play Id</th>
+            <th>@Resources.Resource.Play</th>
             <th>@Resources.Resource.Date</th>
         </tr>
     </thead>
@@ -97,8 +99,8 @@
             {
             <tr>
                 <td class="id" id="id__@date.Id">@date.Id</td>
-                <td class="authorId" id="playId__@date.Id">@date.PlayId</td>
-                <td class="name" id="date__@date.Id">@date.Date.ToShortDateString()</td>
+                <td class="play" id="play__@date.Id">@plays.Find(play => play.Id == date.PlayId).Name</td>
+                <td class="date" id="date__@date.Id">@date.Date.ToShortDateString()</td>
                 <td class="buttons-action">
                     <div class="btn-group">
 
@@ -119,14 +121,14 @@
 </table>
 <div class="row">
     <div class="col-lg-5">
-        @using (Html.BeginForm("GetDate", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("GetDatesByPlayName", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
             {
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon">@Resources.Resource.Date</span>
-                            <input name="dateCheck" type="text" class="form-control">
+                            <span class="input-group-addon">@Resources.Resource.Play</span>
+                            <input name="playName" type="text" class="form-control">
 
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
