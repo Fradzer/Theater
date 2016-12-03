@@ -148,3 +148,4 @@ C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Deb
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\en\Theater.resources.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.dll
 C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.pdb
+C:\Users\Alexandr\Desktop\labs\яKурсASP\FinalProject\Theater\Theater\obj\Debug\Theater.csprojResolveAssemblyReference.cache

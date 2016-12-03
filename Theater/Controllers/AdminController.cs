@@ -116,7 +116,7 @@ namespace Theater.Controllers
             }
             catch
             {
-                messagesAuthorTable= Resources.Resource.Error;
+                messagesAuthorTable = Resources.Resource.Error;
                 return RedirectToAction("AuthorsTable", "Admin");
             }
         }
@@ -156,10 +156,10 @@ namespace Theater.Controllers
             pageSize = normalyPageSize;
 
             page = truePage(page, (int)Math.Ceiling((double)genres.Count / pageSize));
-            
+
             return View(genres.ToPagedList(page, pageSize));
         }
-          
+
         [HttpPost]
         public ActionResult GenreDelete(int id)
         {
@@ -249,10 +249,14 @@ namespace Theater.Controllers
 
             page = truePage(page, (int)Math.Ceiling((double)plays.Count / pageSize));
 
+
+            ViewBag.Authors = authorsDb.GetAllAuthors();
+            ViewBag.Genres = genresDb.GetAllGenres();
+
             return View(plays.ToPagedList(page, pageSize));
         }
 
-        
+
 
         [HttpPost]
         public ActionResult PlayDelete(int id)
@@ -279,25 +283,31 @@ namespace Theater.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatePlay(Play play)
+        public ActionResult CreatePlay(Play play, string authorName, string genreName)
         {
             try
             {
+                play.AuthorId = authorsDb.GetAuthorsByName(authorName).First().Id;
+                play.GenreId = genresDb.GetGenresByName(genreName).First().Id;
+
                 playsDb.Create(play);
                 messagesPlayTable = Resources.Resource.MessageCreated;
                 return RedirectToAction("PlaysTable", "Admin");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 messagesPlayTable = Resources.Resource.Error;
                 return RedirectToAction("PlaysTable", "Admin");
             }
         }
         [HttpPost]
-        public ActionResult PlayUpdate(Play play)
+        public ActionResult PlayUpdate(Play play, string authorName, string genreName)
         {
             try
             {
+                play.AuthorId = authorsDb.GetAuthorsByName(authorName).First().Id;
+                play.GenreId = genresDb.GetGenresByName(genreName).First().Id;
+
                 playsDb.Update(play);
                 messagesPlayTable = Resources.Resource.MessageUpdated;
 
@@ -333,14 +343,16 @@ namespace Theater.Controllers
             ModelState.AddModelError("messages", messagesDatePlayTable);
             messagesDatePlayTable = null;
 
-            DatePlay filterDate = TempData["Date"] as DatePlay;
+            List<DatePlay> filterDate = TempData["Date"] as List<DatePlay>;
 
-            List<DatePlay> dates = filterDate == null ? datesDb.GetAllDates() : new List<DatePlay> { filterDate };
+            List<DatePlay> dates = filterDate ?? datesDb.GetAllDates();
 
             int sizeForPage = pageSize;
             pageSize = normalyPageSize;
 
             page = truePage(page, (int)Math.Ceiling((double)dates.Count / pageSize));
+
+            ViewBag.Plays = playsDb.GetAllPlays();
 
             return View(dates.ToPagedList(page, pageSize));
         }
@@ -370,7 +382,7 @@ namespace Theater.Controllers
         }
 
         [HttpPost]
-        public ActionResult DatePlayCreate(DatePlay date, string dateCheck)
+        public ActionResult DatePlayCreate(DatePlay date, string dateCheck, string playName)
         {
             try
             {
@@ -378,6 +390,8 @@ namespace Theater.Controllers
                 if (DateTime.TryParse(dateCheck, out newDate) &&
                     datesDb.GetAllDates().Where(datePlay => datePlay.Date == newDate).Count() == 0)
                 {
+                    date.PlayId = playsDb.GetPlaysByName(playName).First().Id;
+
                     date.Date = newDate;
                     datesDb.Create(date);
                     messagesDatePlayTable = Resources.Resource.MessageCreated;
@@ -396,14 +410,18 @@ namespace Theater.Controllers
             }
         }
         [HttpPost]
-        public ActionResult DatePlayUpdate(DatePlay date, string dateCheck)
+        public ActionResult DatePlayUpdate(DatePlay date, string dateCheck, string playName)
         {
             try
             {
                 DateTime newDate;
                 if (DateTime.TryParse(dateCheck, out newDate) &&
-                    datesDb.GetAllDates().Where(datePlay => datePlay.Date == newDate).Count() == 0)
+                    (datesDb.GetAllDates().Where(datePlay => datePlay.Date == newDate).Count() == 0 ||
+                    datesDb.GetAllDates().First(datePlay => datePlay.Date == newDate).Id == date.Id))
                 {
+                    date.PlayId = playsDb.GetPlaysByName(playName).First().Id;
+
+
                     date.Date = newDate;
                     datesDb.Update(date);
                     messagesDatePlayTable = Resources.Resource.MessageUpdated;
@@ -415,7 +433,7 @@ namespace Theater.Controllers
                     return RedirectToAction("DatePlaysTable", "Admin");
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 messagesDatePlayTable = Resources.Resource.Error;
                 return RedirectToAction("DatePlaysTable", "Admin");
@@ -423,20 +441,13 @@ namespace Theater.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetDate(string dateCheck)
+        public ActionResult GetDatesByPlayName(string playName)
         {
             try
             {
-                DateTime newDate;
-                if (DateTime.TryParse(dateCheck, out newDate))
-                {
-                    TempData["Date"] = datesDb.GetDate(newDate);
-                    pageSize = pageSizeForFilter;
-                }
-                else
-                {
-                    TempData["Date"] = null;
-                }
+                TempData["Date"] = datesDb.GetDatesByPlayIds(playsDb.GetPlaysByName(playName).Select(a => a.Id).ToList());
+                pageSize = pageSizeForFilter;
+
                 return RedirectToAction("DatePlaysTable", "Admin");
             }
             catch

@@ -160,11 +160,16 @@ namespace Theater.WorkingDb.Connections
                 command.ExecuteNonQuery();
             }
         }
-
-        public DatePlay GetDate(DateTime newDate)
+        
+        public List<DatePlay> GetDatesByPlayIds(List<int> ids)
         {
-            DatePlay filterDate = GetAllDates().First(date => date.Date.Date == newDate.Date);
-            return filterDate;
+            List<DatePlay> dates = new List<DatePlay>();
+            foreach (var id in ids)
+            {
+                dates.AddRange(GetDatesByIdPlay(id));
+            }
+            return dates;
+
         }
     }
 }
