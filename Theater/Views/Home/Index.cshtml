@@ -1,12 +1,11 @@
 ﻿@using Theater.Models.Plays;
 @using PagedList;
 @using PagedList.Mvc;
-
+@model IPagedList<Play>
 @{
     List<DatePlay> dates = (List<DatePlay>)ViewBag.Dates;
     List<Genre> genres = (List<Genre>)ViewBag.Genres;
     List<Author> authors = (List<Author>)ViewBag.Authors;
-    IPagedList<Play> plays = ViewBag.Plays;
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -19,7 +18,7 @@
     <title>Theater</title>
 </head>
 <body>
-    @foreach (var play in plays)
+    @foreach (var play in Model)
     {
         var playDates = dates.Where(x => x.PlayId == play.Id).ToList();
         if (playDates != null && playDates.Count > 0)
@@ -65,7 +64,7 @@
         </div>
         }
     }    
-    @Resources.Resource.Page @(plays.PageCount < plays.PageNumber ? 0 : plays.PageNumber) @Resources.Resource.of @plays.PageCount
-    @Html.PagedListPager(plays, page => Url.Action("Index", new { page }))
+    @Resources.Resource.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Resources.Resource.of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </body>
 </html>

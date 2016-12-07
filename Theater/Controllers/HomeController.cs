@@ -46,11 +46,24 @@ namespace Theater.Controllers
             var sortedPlays = playsDb.GetAllPlays().OrderBy(a => a.Name).ToList()
                             .Where(play => sortedDates.Where(date=> date.PlayId == play.Id).Count() > 0);
 
-            ViewBag.Plays = sortedPlays.ToPagedList(page, pageSize);
+            page = truePage(page, (int)Math.Ceiling((double)sortedPlays.Count() / pageSize));
 
-
-            return View();
+            return View(sortedPlays.ToPagedList(page, pageSize));
         }
+
+        private int truePage(int page, int pageCount)
+        {
+            if (page > pageCount)
+            {
+                page = pageCount;
+            }
+            if (page < 1)
+            {
+                page = 1;
+            }
+            return page;
+        }
+
 
         [HttpPost]
         public ActionResult ChangeLang(string lang)
